@@ -19,6 +19,8 @@ public class MouseManager : Singleton<MouseManager>
 
     void FindMouseTarget()
     {
+        MouseInteractable newTarget = null;
+
         var hits = Physics2D.RaycastAll(
             Camera.main.ScreenToWorldPoint(Input.mousePosition),
             Vector2.zero
@@ -29,16 +31,18 @@ public class MouseManager : Singleton<MouseManager>
             var mouseInteractable = hit.collider.GetComponent<MouseInteractable>();
             if (mouseInteractable != null && mouseInteractable != grabbedObject)
             {
-                mouseTarget = mouseInteractable;
-                return;
+                newTarget = mouseInteractable;
+                newTarget?.OnMouseIn();
+                break;
             }
         }
 
-        if (mouseTarget != null)
+        if (mouseTarget != newTarget)
         {
-            mouseTarget.OnMouseOut();
-            mouseTarget = null;
+            mouseTarget?.OnMouseOut();
         }
+
+        mouseTarget = newTarget;
     }
 
     void MoveGrabbedToMousePosition()
@@ -52,19 +56,19 @@ public class MouseManager : Singleton<MouseManager>
 
     void HandleClicks()
     {
-        if (mouseTarget == null)
-            return;
-
         if (Input.GetMouseButtonDown(0))
         {
-            if (mouseTarget is Grabbable)
+            if (mouseTarget != null)
             {
-                grabbedObject = mouseTarget;
-                (mouseTarget as Grabbable).OnGrab();
-            }
-            else
-            {
-                mouseTarget.OnClick();
+                if (mouseTarget is Grabbable)
+                {
+                    grabbedObject = mouseTarget;
+                    (mouseTarget as Grabbable).OnGrab();
+                }
+                else
+                {
+                    mouseTarget.OnClick();
+                }
             }
         }
         else if (Input.GetMouseButtonUp(0))
@@ -76,12 +80,8 @@ public class MouseManager : Singleton<MouseManager>
             }
             else
             {
-                mouseTarget.OnClickUp();
+                mouseTarget?.OnClickUp();
             }
-        }
-        else
-        {
-            mouseTarget.OnMouseIn();
         }
     }
 }

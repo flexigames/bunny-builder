@@ -55,6 +55,7 @@ public class Worker : MouseInteractable, Grabbable
     {
         if (isGrabbed)
             return;
+
         Highlight();
     }
 
@@ -72,9 +73,9 @@ public class Worker : MouseInteractable, Grabbable
 
     public void OnRelease()
     {
-        isGrabbed = false;
         spriteRenderer.flipY = false;
         Unhighlight();
         agent.SetDestination(transform.position);
+        isGrabbed = false;
     }
 }
