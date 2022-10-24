@@ -57,7 +57,17 @@ public class MouseManager : Singleton<MouseManager>
     void HandleClicks()
     {
         if (mouseTarget == null)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                var workers = FindObjectsOfType<Worker>();
+                foreach (var worker in workers)
+                {
+                    worker.SetDestination(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+                }
+            }
             return;
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
