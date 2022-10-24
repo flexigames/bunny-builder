@@ -8,6 +8,16 @@ public class MouseManager : Singleton<MouseManager>
 
     public MouseInteractable grabbedObject;
 
+    public static bool IsGrabbing
+    {
+        get { return _instance.grabbedObject != null; }
+    }
+
+    public static MouseInteractable GrabbedObject
+    {
+        get { return _instance.grabbedObject; }
+    }
+
     void Update()
     {
         FindMouseTarget();
@@ -73,14 +83,12 @@ public class MouseManager : Singleton<MouseManager>
         }
         else if (Input.GetMouseButtonUp(0))
         {
+            mouseTarget?.OnClickUp();
+
             if (grabbedObject != null)
             {
                 (grabbedObject as Grabbable).OnRelease();
                 grabbedObject = null;
-            }
-            else
-            {
-                mouseTarget?.OnClickUp();
             }
         }
     }
