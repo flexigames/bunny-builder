@@ -12,6 +12,10 @@ public class Worker : MouseInteractable, Grabbable
 
     public bool isGrabbed = false;
 
+    private Resource holding;
+
+    private WorkStation currentWorkStation;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -29,6 +33,7 @@ public class Worker : MouseInteractable, Grabbable
     void Update()
     {
         FlipDirection();
+        MoveHolding();
         if (job == "collecting")
         {
             Collect();
@@ -90,16 +95,53 @@ public class Worker : MouseInteractable, Grabbable
         this.job = job;
     }
 
+    public void SetWorkStation(WorkStation workStation)
+    {
+        currentWorkStation = workStation;
+    }
+
+    public void MoveHolding()
+    {
+        if (holding != null)
+        {
+            holding.transform.position = transform.position;
+        }
+    }
+
     public void Collect()
     {
-        var resource = FindClosestResource();
-        if (resource == null)
+        if (holding == null)
         {
-            SetJob("idle");
-            return;
-        }
+            var resource = FindClosestResource();
+            if (resource == null)
+            {
+                SetJob("idle");
+                SetWorkStation(null);
+                return;
+            }
 
-        SetDestination(resource.transform.position);
+            if (Vector3.Distance(transform.position, resource.transform.position) < 0.5f)
+            {
+                holding = resource;
+            }
+            else
+            {
+                SetDestination(resource.transform.position);
+            }
+        }
+        else
+        {
+            if (Vector3.Distance(transform.position, currentWorkStation.transform.position) < 0.5f)
+            {
+                holding = null;
+                SetJob("idle");
+                SetWorkStation(null);
+            }
+            else
+            {
+                SetDestination(currentWorkStation.transform.position);
+            }
+        }
     }
 
     Resource FindClosestResource()

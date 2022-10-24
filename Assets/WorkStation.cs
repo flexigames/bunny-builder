@@ -10,6 +10,7 @@ public class WorkStation : MouseInteractable
         {
             var worker = MouseManager.GrabbedObject as Worker;
             worker.SetJob("collecting");
+            worker.SetWorkStation(this);
         }
     }
 
