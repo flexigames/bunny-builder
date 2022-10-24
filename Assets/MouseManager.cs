@@ -6,8 +6,24 @@ public class MouseManager : Singleton<MouseManager>
 {
     MouseInteractable mouseTarget;
 
+    MouseInteractable grabbedObject;
+
+    void Update()
+    {
+        FindMouseTarget();
+
+        MoveGrabbedToMousePosition();
+
+        HandleClicks();
+    }
+
     void FindMouseTarget()
     {
+        if (grabbedObject != null)
+        {
+            return;
+        }
+
         var hits = Physics2D.RaycastAll(
             Camera.main.ScreenToWorldPoint(Input.mousePosition),
             Vector2.zero
@@ -30,20 +46,46 @@ public class MouseManager : Singleton<MouseManager>
         }
     }
 
-    void Update()
+    void MoveGrabbedToMousePosition()
     {
-        FindMouseTarget();
+        if (grabbedObject == null)
+            return;
+        grabbedObject.transform.position = (Vector2)
+            Camera.main.ScreenToWorldPoint(Input.mousePosition);
+    }
 
-        if (mouseTarget != null)
+    void HandleClicks()
+    {
+        if (mouseTarget == null)
+            return;
+
+        if (Input.GetMouseButtonDown(0))
         {
-            if (Input.GetMouseButtonDown(0))
+            if (mouseTarget is Grabbable)
             {
-                mouseTarget.OnClick();
+                grabbedObject = mouseTarget;
+                (mouseTarget as Grabbable).OnGrab();
             }
             else
             {
-                mouseTarget.OnMouseIn();
+                mouseTarget.OnClick();
             }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            if (grabbedObject != null)
+            {
+                (grabbedObject as Grabbable).OnRelease();
+                grabbedObject = null;
+            }
+            else
+            {
+                mouseTarget.OnClickUp();
+            }
+        }
+        else
+        {
+            mouseTarget.OnMouseIn();
         }
     }
 }

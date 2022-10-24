@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Worker : MouseInteractable
+public class Worker : MouseInteractable, Grabbable
 {
     void Start() { }
 
-    void Update()
-    {
-        base.Update();
-    }
+    void Update() { }
 
     public override void OnMouseIn()
     {
@@ -17,6 +14,16 @@ public class Worker : MouseInteractable
     }
 
     public override void OnMouseOut()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    public void OnGrab()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    public void OnRelease()
     {
         gameObject.GetComponent<SpriteRenderer>().color = Color.white;
     }
