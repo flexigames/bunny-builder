@@ -8,6 +8,8 @@ public class Worker : MouseInteractable, Grabbable
     private NavMeshAgent agent;
     private SpriteRenderer spriteRenderer;
 
+    public bool isGrabbed = false;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -39,23 +41,40 @@ public class Worker : MouseInteractable, Grabbable
         }
     }
 
-    public override void OnMouseIn()
+    void Highlight()
     {
         gameObject.GetComponent<SpriteRenderer>().color = new Color(0.55f, 0.75f, 0.75f);
     }
 
+    void Unhighlight()
+    {
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
+    }
+
+    public override void OnMouseIn()
+    {
+        if (isGrabbed)
+            return;
+        Highlight();
+    }
+
     public override void OnMouseOut()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        Unhighlight();
     }
 
     public void OnGrab()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        isGrabbed = true;
+        Unhighlight();
+        spriteRenderer.flipY = true;
     }
 
     public void OnRelease()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = Color.white;
+        isGrabbed = false;
+        spriteRenderer.flipY = false;
+        Unhighlight();
+        agent.SetDestination(transform.position);
     }
 }

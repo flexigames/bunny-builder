@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class MouseManager : Singleton<MouseManager>
 {
-    MouseInteractable mouseTarget;
+    public MouseInteractable mouseTarget;
 
-    MouseInteractable grabbedObject;
+    public MouseInteractable grabbedObject;
 
     void Update()
     {
@@ -19,11 +19,6 @@ public class MouseManager : Singleton<MouseManager>
 
     void FindMouseTarget()
     {
-        if (grabbedObject != null)
-        {
-            return;
-        }
-
         var hits = Physics2D.RaycastAll(
             Camera.main.ScreenToWorldPoint(Input.mousePosition),
             Vector2.zero
@@ -32,7 +27,7 @@ public class MouseManager : Singleton<MouseManager>
         foreach (var hit in hits)
         {
             var mouseInteractable = hit.collider.GetComponent<MouseInteractable>();
-            if (mouseInteractable != null)
+            if (mouseInteractable != null && mouseInteractable != grabbedObject)
             {
                 mouseTarget = mouseInteractable;
                 return;
@@ -50,6 +45,7 @@ public class MouseManager : Singleton<MouseManager>
     {
         if (grabbedObject == null)
             return;
+
         grabbedObject.transform.position = (Vector2)
             Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
@@ -57,17 +53,7 @@ public class MouseManager : Singleton<MouseManager>
     void HandleClicks()
     {
         if (mouseTarget == null)
-        {
-            if (Input.GetMouseButtonUp(0))
-            {
-                var workers = FindObjectsOfType<Worker>();
-                foreach (var worker in workers)
-                {
-                    worker.SetDestination(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-                }
-            }
             return;
-        }
 
         if (Input.GetMouseButtonDown(0))
         {
