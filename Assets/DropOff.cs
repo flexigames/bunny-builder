@@ -68,4 +68,22 @@ public class DropOff : WorkStation
     {
         return resources[ResourceType.Wood].Count >= 1 && resources[ResourceType.Stone].Count >= 1;
     }
+
+    public bool HasEnoughResources(int wood, int stone)
+    {
+        return resources[ResourceType.Wood].Count >= wood
+            && resources[ResourceType.Stone].Count >= stone;
+    }
+
+    public void RemoveResources(int wood, int stone)
+    {
+        for (int i = 0; i < wood; i++)
+        {
+            Remove(ResourceType.Wood);
+        }
+        for (int i = 0; i < stone; i++)
+        {
+            Remove(ResourceType.Stone);
+        }
+    }
 }
