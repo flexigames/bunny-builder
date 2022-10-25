@@ -37,6 +37,11 @@ public class WorkStation : MouseInteractable
             workerText.text = workers.ToString();
     }
 
+    public Statue GetStatue()
+    {
+        return GetComponent<Statue>();
+    }
+
     int CountNumberOfWorkers()
     {
         var workers = FindObjectsOfType<Worker>();

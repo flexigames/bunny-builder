@@ -60,6 +60,9 @@ public class Worker : MouseInteractable
 
         var sounds = FindObjectOfType<Sounds>();
         sounds.PlayGiggle();
+
+        var animator = GetComponent<Animator>();
+        animator.SetBool("isDragged", true);
     }
 
     void StopWorking()
@@ -77,6 +80,8 @@ public class Worker : MouseInteractable
         base.OnRelease();
         spriteRenderer.flipY = false;
         agent.SetDestination(transform.position);
+        var animator = GetComponent<Animator>();
+        animator.SetBool("isDragged", false);
     }
 
     public void SetWorkStation(WorkStation newWorkStation)
@@ -203,23 +208,17 @@ public class Worker : MouseInteractable
         holding.Add(resourcesPile.Remove(ResourceType.Stone));
     }
 
-    IEnumerator GoToConstructionSite()
-    {
-        var site = WorkStation.workStations[WorkStationType.Construction];
-        SetDestination(site.transform.position);
-        yield return new WaitUntil(
-            () => Vector3.Distance(transform.position, site.transform.position) < 0.1f
-        );
-    }
-
     IEnumerator Construct()
     {
+        var site = WorkStation.workStations[WorkStationType.Construction];
+        var statue = site.GetStatue();
         foreach (var resource in holding)
         {
             Destroy(resource.gameObject);
         }
         DropHolding();
         yield return new WaitForSeconds(2);
+        statue.IncreasePhase();
     }
 
     IEnumerator ConstructionJob()
@@ -228,7 +227,7 @@ public class Worker : MouseInteractable
         {
             yield return GoToDropOff();
             yield return WaitForEnoughResources();
-            yield return GoToConstructionSite();
+            yield return GoToRandomWorkPlace();
             yield return Construct();
         }
     }
