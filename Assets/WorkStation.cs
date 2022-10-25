@@ -13,6 +13,8 @@ public class WorkStation : MouseInteractable
 {
     public WorkStationType type;
 
+    public List<GameObject> workPlaces = new List<GameObject>();
+
     public GameObject resourcePrefab;
 
     public static Dictionary<WorkStationType, WorkStation> workStations =

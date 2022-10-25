@@ -27,7 +27,11 @@ public class Worker : MouseInteractable
 
     public void SetDestination(Vector3 destination)
     {
-        agent.SetDestination(destination);
+        var successful = agent.SetDestination(destination);
+        if (!successful)
+        {
+            Debug.LogError("Failed to set destination");
+        }
     }
 
     void Update()
@@ -162,15 +166,27 @@ public class Worker : MouseInteractable
         );
     }
 
+    IEnumerator GoToRandomWorkPlace()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        var workPlaces = workStation.workPlaces;
+        var workPlace = workPlaces[Random.Range(0, workPlaces.Count)];
+        SetDestination(workPlace.transform.position);
+        yield return new WaitUntil(
+            () => Vector3.Distance(transform.position, workPlace.transform.position) < 0.1f
+        );
+    }
+
     IEnumerator ProductionJob()
     {
         while (true)
         {
+            yield return GoToRandomWorkPlace();
+
             yield return Produce();
 
             yield return CarryToDropOff();
-
-            yield return GoToWorkStation();
         }
     }
 
