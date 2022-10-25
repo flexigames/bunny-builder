@@ -29,7 +29,7 @@ public class Upgrade : MonoBehaviour
     public void OnClick()
     {
         dropOff.ConsumeResources(5, 5);
-        var worker = Instantiate(workerPrefab);
+        var worker = Instantiate(workerPrefab) as GameObject;
         worker.transform.position =
             workerSpawnPosition.position
             + new Vector3(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f), 0);
