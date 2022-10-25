@@ -8,6 +8,9 @@ public class Sounds : MonoBehaviour
 
     public void PlayGiggle()
     {
+        if (bunnyGiggle == null)
+            return;
+
         var audioSource = GetComponent<AudioSource>();
         audioSource.PlayOneShot(bunnyGiggle);
     }

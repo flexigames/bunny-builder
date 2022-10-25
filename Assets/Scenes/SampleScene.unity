@@ -3665,7 +3665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71842d07ba264443f86a7e08fd1af4fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bunnyGiggle: {fileID: 8300000, guid: 21f78cb8743d64edaa37cf045a0ca4a5, type: 3}
+  bunnyGiggle: {fileID: 0}
 --- !u!1 &1610404027
 GameObject:
   m_ObjectHideFlags: 0
