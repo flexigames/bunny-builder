@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DropOff : WorkStation
 {
@@ -10,16 +11,27 @@ public class DropOff : WorkStation
     public List<GameObject> woodLocations = new List<GameObject>();
     public List<GameObject> stoneLocations = new List<GameObject>();
 
+    public TextMeshProUGUI woodText;
+    public TextMeshProUGUI stoneText;
+
     void Start()
     {
         resources[ResourceType.Wood] = new List<Resource>();
         resources[ResourceType.Stone] = new List<Resource>();
+        UpdateText();
+    }
+
+    void UpdateText()
+    {
+        woodText.text = resources[ResourceType.Wood].Count.ToString();
+        stoneText.text = resources[ResourceType.Stone].Count.ToString();
     }
 
     public void Add(Resource resource)
     {
         resources[resource.type].Add(resource);
         resource.transform.position = GetLocation(resource.type);
+        UpdateText();
     }
 
     Vector3 GetLocation(ResourceType type)
@@ -48,6 +60,7 @@ public class DropOff : WorkStation
 
         var resource = resources[resourceType][0];
         resources[resourceType].Remove(resource);
+        UpdateText();
         return resource;
     }
 
