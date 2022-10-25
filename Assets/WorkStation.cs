@@ -12,6 +12,16 @@ public class WorkStation : MouseInteractable
 {
     public WorkStationType type;
 
+    public static Dictionary<WorkStationType, WorkStation> workStations =
+        new Dictionary<WorkStationType, WorkStation>();
+
+    public override void Awake()
+    {
+        base.Awake();
+
+        workStations[type] = this;
+    }
+
     override public void OnClickUp()
     {
         if (MouseManager.GrabbedObject is Worker)
@@ -29,18 +39,9 @@ public class WorkStation : MouseInteractable
         }
     }
 
-    void Highlight()
-    {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.55f, 0.75f, 0.75f);
-    }
-
-    void Unhighlight()
-    {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
-    }
-
     public override void OnMouseIn()
     {
+        Debug.Log("Is grabbing: " + MouseManager.IsGrabbing);
         if (!MouseManager.IsGrabbing)
             return;
 

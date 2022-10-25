@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Worker : MouseInteractable, Grabbable
+public class Worker : MouseInteractable
 {
     private NavMeshAgent agent;
     private SpriteRenderer spriteRenderer;
-
-    public bool isGrabbed = false;
 
     private Resource holding;
 
@@ -16,6 +14,8 @@ public class Worker : MouseInteractable, Grabbable
 
     void Start()
     {
+        isGrabbable = true;
+
         agent = GetComponent<NavMeshAgent>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -35,7 +35,11 @@ public class Worker : MouseInteractable, Grabbable
 
         if (workStation?.type == WorkStationType.DropOff)
         {
-            Collect();
+            DropOffJob();
+        }
+        else if (workStation?.type == WorkStationType.Wood)
+        {
+            WoodJob();
         }
     }
 
@@ -51,42 +55,20 @@ public class Worker : MouseInteractable, Grabbable
         }
     }
 
-    void Highlight()
+    override public void OnGrab()
     {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(0.55f, 0.75f, 0.75f);
-    }
+        base.OnGrab();
 
-    void Unhighlight()
-    {
-        gameObject.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f);
-    }
-
-    public override void OnMouseIn()
-    {
-        if (isGrabbed)
-            return;
-
-        Highlight();
-    }
-
-    public override void OnMouseOut()
-    {
-        Unhighlight();
-    }
-
-    public void OnGrab()
-    {
-        isGrabbed = true;
-        Unhighlight();
         spriteRenderer.flipY = true;
+        holding = null;
+        workStation = null;
     }
 
-    public void OnRelease()
+    override public void OnRelease()
     {
+        base.OnRelease();
         spriteRenderer.flipY = false;
-        Unhighlight();
         agent.SetDestination(transform.position);
-        isGrabbed = false;
     }
 
     public void SetWorkStation(WorkStation newWorkStation)
@@ -102,7 +84,17 @@ public class Worker : MouseInteractable, Grabbable
         }
     }
 
-    public void Collect()
+    public void WoodJob()
+    {
+        // produce wood for 2 seconds
+
+
+
+        // carry wood to pile
+        // return to work station
+    }
+
+    public void DropOffJob()
     {
         if (holding == null)
         {

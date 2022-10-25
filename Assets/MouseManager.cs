@@ -70,10 +70,10 @@ public class MouseManager : Singleton<MouseManager>
         {
             if (mouseTarget != null)
             {
-                if (mouseTarget is Grabbable)
+                if (mouseTarget.isGrabbable)
                 {
                     grabbedObject = mouseTarget;
-                    (mouseTarget as Grabbable).OnGrab();
+                    mouseTarget.OnGrab();
                 }
                 else
                 {
@@ -87,7 +87,7 @@ public class MouseManager : Singleton<MouseManager>
 
             if (grabbedObject != null)
             {
-                (grabbedObject as Grabbable).OnRelease();
+                grabbedObject.OnRelease();
                 grabbedObject = null;
             }
         }
