@@ -76,6 +76,10 @@ public class Worker : MouseInteractable
         {
             StartProductionJob();
         }
+        else if (workStation?.type == WorkStationType.Construction)
+        {
+            StartConstructionJob();
+        }
     }
 
     public void MoveHolding()
@@ -93,6 +97,12 @@ public class Worker : MouseInteractable
         StartCoroutine(currentAction);
     }
 
+    public void StartConstructionJob()
+    {
+        currentAction = ConstructionJob();
+        StartCoroutine(currentAction);
+    }
+
     IEnumerator Produce()
     {
         yield return new WaitForSeconds(2);
@@ -104,7 +114,7 @@ public class Worker : MouseInteractable
 
     IEnumerator CarryToDropOff()
     {
-        var resourcesPile = WorkStation.workStations[WorkStationType.DropOff];
+        var resourcesPile = WorkStation.workStations[WorkStationType.DropOff] as DropOff;
 
         var destination =
             resourcesPile.transform.position
@@ -112,7 +122,18 @@ public class Worker : MouseInteractable
         SetDestination(destination);
         yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) < 0.1f);
 
+        resourcesPile.Add(holding);
         holding = null;
+    }
+
+    IEnumerator GoToDropOff()
+    {
+        yield return new WaitForSeconds(0.5f);
+        var resourcesPile = WorkStation.workStations[WorkStationType.DropOff];
+        SetDestination(resourcesPile.transform.position);
+        yield return new WaitUntil(
+            () => Vector3.Distance(transform.position, resourcesPile.transform.position) < 0.1f
+        );
     }
 
     IEnumerator GoToWorkStation()
@@ -123,7 +144,7 @@ public class Worker : MouseInteractable
         );
     }
 
-    private IEnumerator ProductionJob()
+    IEnumerator ProductionJob()
     {
         while (true)
         {
@@ -132,6 +153,35 @@ public class Worker : MouseInteractable
             yield return CarryToDropOff();
 
             yield return GoToWorkStation();
+        }
+    }
+
+    IEnumerator WaitForEnoughResources()
+    {
+        var resourcesPile = WorkStation.workStations[WorkStationType.DropOff] as DropOff;
+
+        yield return new WaitUntil(() => resourcesPile.HasEnoughResources());
+
+        holding = resourcesPile.Remove(ResourceType.Wood);
+    }
+
+    IEnumerator GoToConstructionSite()
+    {
+        var site = WorkStation.workStations[WorkStationType.Construction];
+        SetDestination(site.transform.position);
+        yield return new WaitUntil(
+            () => Vector3.Distance(transform.position, site.transform.position) < 0.1f
+        );
+        holding = null;
+    }
+
+    IEnumerator ConstructionJob()
+    {
+        while (true)
+        {
+            yield return GoToDropOff();
+            yield return WaitForEnoughResources();
+            yield return GoToConstructionSite();
         }
     }
 

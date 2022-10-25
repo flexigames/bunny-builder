@@ -5,7 +5,8 @@ using UnityEngine;
 public enum WorkStationType
 {
     DropOff,
-    Production
+    Production,
+    Construction
 }
 
 public class WorkStation : MouseInteractable
