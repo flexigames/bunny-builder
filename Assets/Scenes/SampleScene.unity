@@ -3534,8 +3534,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1560665098}
   - component: {fileID: 1560665097}
+  - component: {fileID: 1560665099}
   m_Layer: 0
-  m_Name: BG Music
+  m_Name: Sounds and Music
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3553,7 +3554,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6d7435a7fbafe4befb1096dfbb08d454, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.855
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -3652,6 +3653,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1560665099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1560665096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71842d07ba264443f86a7e08fd1af4fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bunnyGiggle: {fileID: 8300000, guid: 21f78cb8743d64edaa37cf045a0ca4a5, type: 3}
 --- !u!1 &1610404027
 GameObject:
   m_ObjectHideFlags: 0

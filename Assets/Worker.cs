@@ -57,6 +57,9 @@ public class Worker : MouseInteractable
         base.OnGrab();
         StopWorking();
         spriteRenderer.flipY = true;
+
+        var sounds = FindObjectOfType<Sounds>();
+        sounds.PlayGiggle();
     }
 
     void StopWorking()
