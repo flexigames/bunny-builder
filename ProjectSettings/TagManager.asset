@@ -41,3 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Building
+    uniqueID: 3005820001
+    locked: 0
+  - name: Worker
+    uniqueID: 3808978809
+    locked: 0
+  - name: Resource
+    uniqueID: 3270373325
+    locked: 0

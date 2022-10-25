@@ -41,7 +41,6 @@ public class WorkStation : MouseInteractable
 
     public override void OnMouseIn()
     {
-        Debug.Log("Is grabbing: " + MouseManager.IsGrabbing);
         if (!MouseManager.IsGrabbing)
             return;
 

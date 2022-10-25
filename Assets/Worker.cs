@@ -12,6 +12,8 @@ public class Worker : MouseInteractable
 
     public WorkStation workStation;
 
+    private IEnumerator currentAction;
+
     void Start()
     {
         isGrabbable = true;
@@ -36,10 +38,6 @@ public class Worker : MouseInteractable
         if (workStation?.type == WorkStationType.DropOff)
         {
             DropOffJob();
-        }
-        else if (workStation?.type == WorkStationType.Wood)
-        {
-            WoodJob();
         }
     }
 
@@ -74,24 +72,66 @@ public class Worker : MouseInteractable
     public void SetWorkStation(WorkStation newWorkStation)
     {
         workStation = newWorkStation;
+        if (workStation?.type == WorkStationType.Wood)
+        {
+            StartWoodJob();
+        }
     }
 
     public void MoveHolding()
     {
         if (holding != null)
         {
-            holding.transform.position = transform.position;
+            holding.transform.position =
+                transform.position + new Vector3(spriteRenderer.flipX ? -0.5f : 0.5f, 0.5f, 0);
         }
     }
 
-    public void WoodJob()
+    public void StartWoodJob()
     {
-        // produce wood for 2 seconds
+        currentAction = WoodJob();
+        StartCoroutine(currentAction);
+    }
 
+    IEnumerator ProduceWood()
+    {
+        yield return new WaitForSeconds(2);
+        var wood = Instantiate(Resources.Load("Wood")) as GameObject;
+        wood.transform.position = transform.position;
+        holding = wood.GetComponent<Resource>();
+    }
 
+    IEnumerator CarryToDropOff()
+    {
+        var resourcesPile = WorkStation.workStations[WorkStationType.DropOff];
 
-        // carry wood to pile
-        // return to work station
+        var destination =
+            resourcesPile.transform.position
+            + new Vector3(Random.Range(-1f, 0f), Random.Range(-1f, 0f), 0);
+        SetDestination(destination);
+        yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) < 0.1f);
+
+        holding = null;
+    }
+
+    IEnumerator GoToWorkStation()
+    {
+        SetDestination(workStation.transform.position);
+        yield return new WaitUntil(
+            () => Vector3.Distance(transform.position, workStation.transform.position) < 0.1f
+        );
+    }
+
+    private IEnumerator WoodJob()
+    {
+        while (true)
+        {
+            yield return ProduceWood();
+
+            yield return CarryToDropOff();
+
+            yield return GoToWorkStation();
+        }
     }
 
     public void DropOffJob()
