@@ -137,7 +137,7 @@ public class Worker : MouseInteractable
 
         var destination =
             resourcesPile.transform.position
-            + new Vector3(Random.Range(-1f, 0f), Random.Range(-1f, 0f), 0);
+            + new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(-0.3f, 0.3f), 0);
         SetDestination(destination);
         yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) < 0.1f);
 
