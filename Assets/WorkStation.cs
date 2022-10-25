@@ -2,14 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WorkStationType
+{
+    DropOff,
+    Wood
+}
+
 public class WorkStation : MouseInteractable
 {
+    public WorkStationType type;
+
     override public void OnClickUp()
     {
         if (MouseManager.GrabbedObject is Worker)
         {
             var worker = MouseManager.GrabbedObject as Worker;
-            worker.SetJob("collecting");
             worker.SetWorkStation(this);
         }
     }

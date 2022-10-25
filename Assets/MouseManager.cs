@@ -10,12 +10,12 @@ public class MouseManager : Singleton<MouseManager>
 
     public static bool IsGrabbing
     {
-        get { return _instance.grabbedObject != null; }
+        get { return _instance?.grabbedObject != null; }
     }
 
     public static MouseInteractable GrabbedObject
     {
-        get { return _instance.grabbedObject; }
+        get { return _instance?.grabbedObject; }
     }
 
     void Update()

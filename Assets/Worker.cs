@@ -8,13 +8,11 @@ public class Worker : MouseInteractable, Grabbable
     private NavMeshAgent agent;
     private SpriteRenderer spriteRenderer;
 
-    private string job = "idle";
-
     public bool isGrabbed = false;
 
     private Resource holding;
 
-    private WorkStation currentWorkStation;
+    public WorkStation workStation;
 
     void Start()
     {
@@ -34,7 +32,8 @@ public class Worker : MouseInteractable, Grabbable
     {
         FlipDirection();
         MoveHolding();
-        if (job == "collecting")
+
+        if (workStation?.type == WorkStationType.DropOff)
         {
             Collect();
         }
@@ -90,14 +89,9 @@ public class Worker : MouseInteractable, Grabbable
         isGrabbed = false;
     }
 
-    public void SetJob(string job)
+    public void SetWorkStation(WorkStation newWorkStation)
     {
-        this.job = job;
-    }
-
-    public void SetWorkStation(WorkStation workStation)
-    {
-        currentWorkStation = workStation;
+        workStation = newWorkStation;
     }
 
     public void MoveHolding()
@@ -115,7 +109,6 @@ public class Worker : MouseInteractable, Grabbable
             var resource = FindClosestResource();
             if (resource == null)
             {
-                SetJob("idle");
                 SetWorkStation(null);
                 return;
             }
@@ -131,15 +124,15 @@ public class Worker : MouseInteractable, Grabbable
         }
         else
         {
-            if (Vector3.Distance(transform.position, currentWorkStation.transform.position) < 0.5f)
+            if (Vector3.Distance(transform.position, workStation.transform.position) < 0.5f)
             {
                 holding = null;
-                SetJob("idle");
+
                 SetWorkStation(null);
             }
             else
             {
-                SetDestination(currentWorkStation.transform.position);
+                SetDestination(workStation.transform.position);
             }
         }
     }
