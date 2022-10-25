@@ -8,7 +8,7 @@ public class Worker : MouseInteractable
     private NavMeshAgent agent;
     private SpriteRenderer spriteRenderer;
 
-    private Resource holding;
+    private List<Resource> holding = new List<Resource>();
 
     public WorkStation workStation;
 
@@ -34,11 +34,6 @@ public class Worker : MouseInteractable
     {
         FlipDirection();
         MoveHolding();
-
-        if (workStation?.type == WorkStationType.DropOff)
-        {
-            DropOffJob();
-        }
     }
 
     void FlipDirection()
@@ -56,9 +51,17 @@ public class Worker : MouseInteractable
     override public void OnGrab()
     {
         base.OnGrab();
-
+        StopWorking();
         spriteRenderer.flipY = true;
-        holding = null;
+    }
+
+    void StopWorking()
+    {
+        if (currentAction != null)
+        {
+            StopCoroutine(currentAction);
+        }
+        DropHolding();
         workStation = null;
     }
 
@@ -84,10 +87,12 @@ public class Worker : MouseInteractable
 
     public void MoveHolding()
     {
-        if (holding != null)
+        for (int index = 0; index < holding.Count; index++)
         {
-            holding.transform.position =
-                transform.position + new Vector3(spriteRenderer.flipX ? -0.5f : 0.5f, 0.5f, 0);
+            var resource = holding[index];
+            var offset = (index + 1) * 0.5f / (holding.Count + 1);
+            resource.transform.position =
+                transform.position + new Vector3(spriteRenderer.flipX ? -offset : offset, 0.5f, 0);
         }
     }
 
@@ -109,7 +114,17 @@ public class Worker : MouseInteractable
         var resourcePrefab = workStation.resourcePrefab;
         var resource = Instantiate(resourcePrefab) as GameObject;
         resource.transform.position = transform.position;
-        holding = resource.GetComponent<Resource>();
+        SetHolding(resource.GetComponent<Resource>());
+    }
+
+    void SetHolding(Resource resource)
+    {
+        holding = new List<Resource> { resource };
+    }
+
+    void DropHolding()
+    {
+        holding = new List<Resource>();
     }
 
     IEnumerator CarryToDropOff()
@@ -122,8 +137,11 @@ public class Worker : MouseInteractable
         SetDestination(destination);
         yield return new WaitUntil(() => Vector3.Distance(transform.position, destination) < 0.1f);
 
-        resourcesPile.Add(holding);
-        holding = null;
+        foreach (var resource in holding)
+        {
+            resourcesPile.Add(resource);
+        }
+        DropHolding();
     }
 
     IEnumerator GoToDropOff()
@@ -162,7 +180,8 @@ public class Worker : MouseInteractable
 
         yield return new WaitUntil(() => resourcesPile.HasEnoughResources());
 
-        holding = resourcesPile.Remove(ResourceType.Wood);
+        holding.Add(resourcesPile.Remove(ResourceType.Wood));
+        holding.Add(resourcesPile.Remove(ResourceType.Stone));
     }
 
     IEnumerator GoToConstructionSite()
@@ -172,7 +191,16 @@ public class Worker : MouseInteractable
         yield return new WaitUntil(
             () => Vector3.Distance(transform.position, site.transform.position) < 0.1f
         );
-        holding = null;
+    }
+
+    IEnumerator Construct()
+    {
+        foreach (var resource in holding)
+        {
+            Destroy(resource.gameObject);
+        }
+        DropHolding();
+        yield return new WaitForSeconds(2);
     }
 
     IEnumerator ConstructionJob()
@@ -182,41 +210,7 @@ public class Worker : MouseInteractable
             yield return GoToDropOff();
             yield return WaitForEnoughResources();
             yield return GoToConstructionSite();
-        }
-    }
-
-    public void DropOffJob()
-    {
-        if (holding == null)
-        {
-            var resource = FindClosestResource();
-            if (resource == null)
-            {
-                SetWorkStation(null);
-                return;
-            }
-
-            if (Vector3.Distance(transform.position, resource.transform.position) < 0.5f)
-            {
-                holding = resource;
-            }
-            else
-            {
-                SetDestination(resource.transform.position);
-            }
-        }
-        else
-        {
-            if (Vector3.Distance(transform.position, workStation.transform.position) < 0.5f)
-            {
-                holding = null;
-
-                SetWorkStation(null);
-            }
-            else
-            {
-                SetDestination(workStation.transform.position);
-            }
+            yield return Construct();
         }
     }
 
