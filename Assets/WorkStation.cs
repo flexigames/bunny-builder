@@ -5,12 +5,14 @@ using UnityEngine;
 public enum WorkStationType
 {
     DropOff,
-    Wood
+    Production
 }
 
 public class WorkStation : MouseInteractable
 {
     public WorkStationType type;
+
+    public GameObject resourcePrefab;
 
     public static Dictionary<WorkStationType, WorkStation> workStations =
         new Dictionary<WorkStationType, WorkStation>();

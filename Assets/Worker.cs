@@ -72,9 +72,9 @@ public class Worker : MouseInteractable
     public void SetWorkStation(WorkStation newWorkStation)
     {
         workStation = newWorkStation;
-        if (workStation?.type == WorkStationType.Wood)
+        if (workStation?.type == WorkStationType.Production)
         {
-            StartWoodJob();
+            StartProductionJob();
         }
     }
 
@@ -87,18 +87,19 @@ public class Worker : MouseInteractable
         }
     }
 
-    public void StartWoodJob()
+    public void StartProductionJob()
     {
-        currentAction = WoodJob();
+        currentAction = ProductionJob();
         StartCoroutine(currentAction);
     }
 
-    IEnumerator ProduceWood()
+    IEnumerator Produce()
     {
         yield return new WaitForSeconds(2);
-        var wood = Instantiate(Resources.Load("Wood")) as GameObject;
-        wood.transform.position = transform.position;
-        holding = wood.GetComponent<Resource>();
+        var resourcePrefab = workStation.resourcePrefab;
+        var resource = Instantiate(resourcePrefab) as GameObject;
+        resource.transform.position = transform.position;
+        holding = resource.GetComponent<Resource>();
     }
 
     IEnumerator CarryToDropOff()
@@ -122,11 +123,11 @@ public class Worker : MouseInteractable
         );
     }
 
-    private IEnumerator WoodJob()
+    private IEnumerator ProductionJob()
     {
         while (true)
         {
-            yield return ProduceWood();
+            yield return Produce();
 
             yield return CarryToDropOff();
 
