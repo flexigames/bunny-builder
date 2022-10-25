@@ -75,15 +75,17 @@ public class DropOff : WorkStation
             && resources[ResourceType.Stone].Count >= stone;
     }
 
-    public void RemoveResources(int wood, int stone)
+    public void ConsumeResources(int wood, int stone)
     {
         for (int i = 0; i < wood; i++)
         {
-            Remove(ResourceType.Wood);
+            var resource = Remove(ResourceType.Wood);
+            Destroy(resource.gameObject);
         }
         for (int i = 0; i < stone; i++)
         {
-            Remove(ResourceType.Stone);
+            var resouce = Remove(ResourceType.Stone);
+            Destroy(resouce.gameObject);
         }
     }
 }

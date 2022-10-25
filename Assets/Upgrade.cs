@@ -28,7 +28,7 @@ public class Upgrade : MonoBehaviour
 
     public void OnClick()
     {
-        dropOff.RemoveResources(5, 5);
+        dropOff.ConsumeResources(5, 5);
         var worker = Instantiate(workerPrefab);
         worker.transform.position =
             workerSpawnPosition.position
