@@ -225,6 +225,11 @@ public class Worker : MouseInteractable
     {
         while (true)
         {
+            var site = WorkStation.workStations[WorkStationType.Construction];
+            var statue = site.GetStatue();
+            if (statue.IsDone())
+                break;
+
             yield return GoToDropOff();
             yield return WaitForEnoughResources();
             yield return GoToRandomWorkPlace();

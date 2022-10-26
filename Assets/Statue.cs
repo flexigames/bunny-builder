@@ -18,11 +18,19 @@ public class Statue : MonoBehaviour
 
     void Start()
     {
-        totalBuildSteps = phases.Count * buildStepsPerPhase;
+        totalBuildSteps = (phases.Count - 1) * buildStepsPerPhase;
+    }
+
+    public bool IsDone()
+    {
+        return currentPhase == phases.Count - 1;
     }
 
     public void Build()
     {
+        if (currentPhase >= phases.Count - 1)
+            return;
+
         buildSteps++;
         if (buildSteps % buildStepsPerPhase == 0)
         {
