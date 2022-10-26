@@ -218,7 +218,7 @@ public class Worker : MouseInteractable
         }
         DropHolding();
         yield return new WaitForSeconds(2);
-        statue.IncreasePhase();
+        statue.Build();
     }
 
     IEnumerator ConstructionJob()
