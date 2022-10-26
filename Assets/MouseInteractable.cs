@@ -7,6 +7,8 @@ public abstract class MouseInteractable : MonoBehaviour
     public bool isGrabbable = false;
     public bool isGrabbed = false;
 
+    public bool isActive = true;
+
     private Color originalColor;
 
     public virtual void Awake()

@@ -61,6 +61,7 @@ public class DropOff : WorkStation
 
         var resource = resources[resourceType][0];
         resources[resourceType].Remove(resource);
+        resource.RemoveFromPile();
         UpdateText();
         return resource;
     }

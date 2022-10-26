@@ -39,7 +39,11 @@ public class MouseManager : Singleton<MouseManager>
         foreach (var hit in hits)
         {
             var mouseInteractable = hit.collider.GetComponent<MouseInteractable>();
-            if (mouseInteractable != null && mouseInteractable != grabbedObject)
+            if (
+                mouseInteractable != null
+                && mouseInteractable != grabbedObject
+                && mouseInteractable.isActive
+            )
             {
                 newTarget = mouseInteractable;
                 newTarget?.OnMouseIn();
