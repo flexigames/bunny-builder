@@ -16,4 +16,9 @@ public class Resource : MouseInteractable
     {
         isGrabbable = true;
     }
+
+    public void SetOnPile()
+    {
+        isGrabbable = false;
+    }
 }

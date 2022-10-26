@@ -32,6 +32,7 @@ public class DropOff : WorkStation
         resources[resource.type].Add(resource);
         resource.transform.position = GetLocation(resource.type);
         UpdateText();
+        resource.SetOnPile();
     }
 
     Vector3 GetLocation(ResourceType type)
@@ -86,6 +87,15 @@ public class DropOff : WorkStation
         {
             var resouce = Remove(ResourceType.Stone);
             Destroy(resouce.gameObject);
+        }
+    }
+
+    override public void OnClickUp()
+    {
+        if (MouseManager.GrabbedObject is Resource)
+        {
+            var resource = MouseManager.GrabbedObject as Resource;
+            Add(resource);
         }
     }
 }
