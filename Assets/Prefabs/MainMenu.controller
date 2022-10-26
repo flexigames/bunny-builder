@@ -156,7 +156,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Worker
+  m_Name: MainMenu
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: isDragged
@@ -200,16 +200,16 @@ AnimatorState:
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
-  m_WriteDefaultValues: 1
+  m_WriteDefaultValues: 0
   m_Mirror: 1
   m_SpeedParameterActive: 0
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 4f94adddabe2a470d8bda240d1b1d8df, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9d46317bc0edc41c48dfcc691ceea9de, type: 2}
   m_Tag: 
   m_SpeedParameter: 
-  m_MirrorParameter: 
+  m_MirrorParameter: isDragged
   m_CycleOffsetParameter: 
   m_TimeParameter: 
 --- !u!1102 &5575989751315629123
@@ -233,7 +233,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 5d950503d6d584bb18f6900fb8f35e14, type: 2}
+  m_Motion: {fileID: 7400000, guid: 4f94adddabe2a470d8bda240d1b1d8df, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

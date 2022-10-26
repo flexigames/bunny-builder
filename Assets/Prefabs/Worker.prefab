@@ -102,6 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGrabbable: 0
   isGrabbed: 0
+  isActive: 1
   workStation: {fileID: 0}
 --- !u!195 &4710065832632760798
 NavMeshAgent:
@@ -161,7 +162,7 @@ Animator:
   m_GameObject: {fileID: 4710065832632760788}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 760a6b91bdbf94e2e9c09fc46ef21c4a, type: 2}
+  m_Controller: {fileID: 9100000, guid: b712713db0b7249e1bfd9d413f4f5931, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
