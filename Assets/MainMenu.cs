@@ -6,6 +6,8 @@ public class MainMenu : MonoBehaviour
 {
     public List<Animator> bunnies;
 
+    public float timeBetweenJumps = 2f;
+
     void Start()
     {
         StartCoroutine(AnimateBunnies());
@@ -18,7 +20,7 @@ public class MainMenu : MonoBehaviour
             foreach (var bunny in bunnies)
             {
                 bunny.SetTrigger("Jump");
-                yield return new WaitForSeconds(2f);
+                yield return new WaitForSeconds(timeBetweenJumps);
             }
         }
     }
