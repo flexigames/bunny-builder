@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Statue : MonoBehaviour
 {
@@ -38,6 +39,13 @@ public class Statue : MonoBehaviour
         }
 
         UpdateBar();
+
+        if (IsDone())
+        {
+            var calendar = FindObjectOfType<Calendar>();
+            calendar.isRunning = false;
+            SceneManager.LoadScene("GameEnd");
+        }
     }
 
     void UpdateBar()
